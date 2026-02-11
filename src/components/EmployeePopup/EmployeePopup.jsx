@@ -1,15 +1,60 @@
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux';
 import { closeEmployeePopup } from '../../store/features/popup/popup.Slice';
+import { useEffect, useState } from 'react';
+import { postEmployee, updateEmployee } from '../../store/features/employee/employee.thunk';
 
 function EmployeePopup() {
 
-        const dispatch = useDispatch()  
+    const [formDetails, setFormDetails] = useState({
+        name:'',
+        email:'',
+        bio:'',
+        profileurl:'',
+        highlight: false
+    })
     
+    const dispatch = useDispatch()  
     const popup = useSelector(state=> state.popup.employeepopup)
-    console.log(popup);
-    
-    if(!popup) return null
+
+    const inputCLick = (e) => {
+    const { name, value } = e.target
+    setFormDetails({...formDetails, [name]: value})
+    }
+
+    const OnSubmit = async () => {
+        if(popup.id) {
+        await dispatch(updateEmployee({
+            id: popup.id,
+            details: formDetails
+        }))
+        } else {
+        await dispatch(postEmployee(formDetails))
+        }
+        dispatch(closeEmployeePopup())
+}
+
+    useEffect(() => {
+        if(!popup){
+            setFormDetails({
+                name:'',
+                email:'',
+                bio:'',
+                profileurl:'',
+                highlight: false
+            })
+        } else if(popup.id){
+            setFormDetails({
+                name: popup.name,
+                email: popup.email,
+                bio: popup.bio,
+                profileurl: popup.profileurl,
+                highlight: false 
+            })
+        }
+    }, [popup])
+
+    if(!popup) return null   
 
 
     return (
@@ -18,18 +63,18 @@ function EmployeePopup() {
   <legend className="fieldset-legend">Page details</legend>
   
   <label className="label">Employee Name</label>
-  <input type="text" className="input" placeholder="Enter Name" />
+  <input name='name' value={formDetails.name} onChange={inputCLick} type="text" className="input" placeholder="Enter Name" />
 
   <label className="label">Email</label>
-  <input type="email" className="input" placeholder="Enter Email" />
+  <input name='email' value={formDetails.email} onChange={inputCLick} type="email" className="input" placeholder="Enter Email" />
 
   <label className="label">Profile Url</label>
-  <input type="text" className="input" placeholder="Profile Url" />
+  <input name='profileurl' value={formDetails.profileurl} onChange={inputCLick} type="text" className="input" placeholder="Profile Url" />
 
   <label className="label">Bio</label>
-  <textarea className="textarea h-24" placeholder="Bio"></textarea>
+  <textarea name='bio' value={formDetails.bio} onChange={inputCLick} className="textarea h-24" placeholder="Bio"></textarea>
 
-  <button className="btn btn-neutral mt-4">Submit</button>
+  <button onClick={OnSubmit} className="btn btn-neutral mt-4">Submit</button>
 
 </fieldset>
 </div>

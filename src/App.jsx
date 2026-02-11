@@ -1,10 +1,19 @@
+import { useDispatch } from "react-redux"
 import DeletePopup from "./components/deletePopup/DeletePopup"
 import EmployeePopup from "./components/EmployeePopup/EmployeePopup"
 import Employees from "./components/Employees/Employees"
 import Footer from "./components/Footer"
 import Navbar from "./components/navbar/Navbar"
+import { useEffect } from "react"
+import { getEmployee } from "./store/features/employee/employee.thunk"
 function App() {
+
+ const dispatch = useDispatch()
   
+useEffect(() => {
+ dispatch(getEmployee())
+},[])
+
 
   return (
     <>
