@@ -6,7 +6,7 @@ const initialState = {
 }
 
 export const popupSlice = createSlice({
-  name: 'popuo',
+  name: 'popup',
   initialState,
   reducers: {
      openEmployeePopup: (state, action) => {

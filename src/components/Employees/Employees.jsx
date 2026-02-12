@@ -4,20 +4,24 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { openDeletePopup, openEmployeePopup } from "../../store/features/popup/popup.Slice";
 import { updateEmployee } from "../../store/features/employee/employee.thunk";
+import Loader from "../loader/Loader"
 
 function Employees() {
 
   const employees = useSelector(state=>state.employee.employees)
+  const loading = useSelector(state=>state.employee.loading)
+  
 
     return (
         <Layout>
+          {loading ? ( <Loader />
+ ) : (
         <ul className="list bg-gray-800 rounded-box shadow-md">
           
 {employees.map((details) => (
   <EmployeeCard key={details.id} details={details}/>
-      
 ))}  
-  </ul>
+  </ul>)}
 
 </Layout>
     )
