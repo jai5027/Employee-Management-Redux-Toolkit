@@ -21,7 +21,8 @@ function Employees() {
 {employees.map((details) => (
   <EmployeeCard key={details.id} details={details}/>
 ))}  
-  </ul>)}
+  </ul>
+)}
 
 </Layout>
     )
